@@ -3,8 +3,7 @@ import simpleLightbox from 'simplelightbox';
 import { galleryItems } from './gallery-items';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 // Change code below this line
-/* console.log(simpleLightbox); */
-/* console.log(galleryItems); */
+
 const refs = {
   divGalleryEl: document.querySelector('.gallery'),
 };
