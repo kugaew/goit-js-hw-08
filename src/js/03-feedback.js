@@ -1,13 +1,20 @@
 import throttle from 'lodash.throttle';
 
-const formEl = document.querySelector('form.feedback-form');
+const refs = {
+  formEl: document.querySelector('form.feedback-form'),
+  inputEmailEl: document.querySelector('input'),
+  textareaMessageEl: document.querySelector('textarea'),
+  buttonSubmitEl: document.querySelector('button'),
+};
+
+/* const formEl = document.querySelector('form.feedback-form'); */
 const obj = {};
 const INPUT_FORM_KEY = 'feedback-form-state';
 
 reloadPage();
 
-formEl.addEventListener('input', throttle(onWriteDataToLocalStorage, 500));
-formEl.addEventListener('submit', onSubmitForm);
+refs.formEl.addEventListener('input', throttle(onWriteDataToLocalStorage, 500));
+refs.formEl.addEventListener('submit', onSubmitForm);
 
 function onWriteDataToLocalStorage(evt) {
   checkSubmitButton();
@@ -18,8 +25,11 @@ function onWriteDataToLocalStorage(evt) {
 function onSubmitForm(evt) {
   evt.preventDefault();
   console.log(obj);
-  formEl.reset();
+  refs.formEl.reset();
   localStorage.removeItem(INPUT_FORM_KEY);
+  obj.email = '';
+  obj.message = '';
+  checkSubmitButton();
 }
 
 function reloadPage() {
@@ -27,14 +37,12 @@ function reloadPage() {
 
   if (dataFromLocalStorage) {
     if (dataFromLocalStorage.email) {
-      formEl.querySelector('input[name="email"]').value =
-        dataFromLocalStorage.email;
+      refs.inputEmailEl.value = dataFromLocalStorage.email;
       obj.email = dataFromLocalStorage.email;
     }
 
     if (dataFromLocalStorage.message) {
-      formEl.querySelector('textarea[name="message"]').value =
-        dataFromLocalStorage.message;
+      refs.textareaMessageEl.value = dataFromLocalStorage.message;
       obj.message = dataFromLocalStorage.message;
     }
   }
@@ -42,14 +50,11 @@ function reloadPage() {
 }
 
 function checkSubmitButton() {
-  if (
-    !formEl.querySelector('input[name="email"]').value ||
-    !formEl.querySelector('textarea[name="message"]').value
-  ) {
-    formEl.querySelector('button').setAttribute('disabled', 'true');
+  if (!refs.inputEmailEl.value.length || !refs.textareaMessageEl.value) {
+    refs.buttonSubmitEl.setAttribute('disabled', 'true');
   } else {
-    if (formEl.querySelector('button').hasAttribute('disabled')) {
-      formEl.querySelector('button').removeAttribute('disabled');
+    if (refs.buttonSubmitEl.hasAttribute('disabled')) {
+      refs.buttonSubmitEl.removeAttribute('disabled');
     }
   }
 }
