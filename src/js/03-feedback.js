@@ -10,6 +10,7 @@ formEl.addEventListener('input', throttle(onWriteDataToLocalStorage, 500));
 formEl.addEventListener('submit', onSubmitForm);
 
 function onWriteDataToLocalStorage(evt) {
+  checkSubmitButton();
   obj[evt.target.getAttribute('name')] = evt.target.value;
   localStorage.setItem(INPUT_FORM_KEY, JSON.stringify(obj));
 }
@@ -35,6 +36,20 @@ function reloadPage() {
       formEl.querySelector('textarea[name="message"]').value =
         dataFromLocalStorage.message;
       obj.message = dataFromLocalStorage.message;
+    }
+  }
+  checkSubmitButton();
+}
+
+function checkSubmitButton() {
+  if (
+    !formEl.querySelector('input[name="email"]').value ||
+    !formEl.querySelector('textarea[name="message"]').value
+  ) {
+    formEl.querySelector('button').setAttribute('disabled', 'true');
+  } else {
+    if (formEl.querySelector('button').hasAttribute('disabled')) {
+      formEl.querySelector('button').removeAttribute('disabled');
     }
   }
 }
